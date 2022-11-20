@@ -1,6 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>CS 域前置+流量混淆</title>
+    <url>/2022/937989325/</url>
+    <content><![CDATA[<h2 id="0x01环境"><a href="#0x01环境" class="headerlink" title="0x01环境"></a>0x01环境</h2><p>c2 服务器：cs 4.7</p>
+<p>服务器端：CentOS 7</p>
+<p>客户端：win10</p>
+<p>语言：Java 11</p>
+<h2 id="0x02-概述"><a href="#0x02-概述" class="headerlink" title="0x02 概述"></a>0x02 概述</h2><p>上线原理为 受害者主机运行木马—–&gt;CDN—-&gt;cs服务器收到上线</p>
+<p>执行操作原理为 cs服务器执行命令—–&gt;CDN接收—–&gt;受害者主机执行命令</p>
+<p>架构：</p>
+<p><a href="http://freenom.com/" title="freenom.com">freenom.com</a> + <a href="http://cloudflare.com/" title="cloudflare.com">cloudflare.com</a> + vps</p>
+<p>freenom 作为免费的域名，cloudfare作为CDN</p>
+<p>域名+CDN+VPS&#x20;</p>
+<h2 id="0x03-注册申请相关"><a href="#0x03-注册申请相关" class="headerlink" title="0x03 注册申请相关"></a>0x03 注册申请相关</h2><h3 id="1-freenom"><a href="#1-freenom" class="headerlink" title="1.freenom"></a>1.freenom</h3><p>具体注册可以参考这个</p>
+<p><a href="https://zhuanlan.zhihu.com/p/115535965" title="https://zhuanlan.zhihu.com/p/115535965">https://zhuanlan.zhihu.com/p/115535965</a></p>
+<p>&#x20;<a href="https://www.freenom.com/" title="https://www.freenom.com/">https://www.freenom.com/</a></p>
+<p>先在搜索框输入任意的域名，然后检查可用性</p>
+<p><img src="/2022/937989325/image_rJEFG6jZ6A-16689164290512.png"></p>
+<p>选择购买多长时间，然后点击继续</p>
+<p><img src="/2022/937989325/image_puMVD6k9Hp-16689164290501.png"></p>
+<p>然后选择邮箱，最好是Google邮箱，临时邮箱注册不了</p>
+<p><img src="/2022/937989325/image_m4YuhzdQYZ-16689164290513.png"></p>
+<p>后面需要填写真实身份，不然注册不上，可以使用随机身份生成一个</p>
+<p><a href="https://www.shenfendaquan.com/" title="https://www.shenfendaquan.com/">https://www.shenfendaquan.com/</a>，然后填写对应的就行了</p>
+<p>至此，注册及申请完成。你会得到一个域名。</p>
+<h3 id="2-CloudFlare"><a href="#2-CloudFlare" class="headerlink" title="2.CloudFlare"></a>2.CloudFlare</h3><p>这个是CDN</p>
+<p><a href="https://www.cloudflare.com/zh-cn/" title="https://www.cloudflare.com/">https://www.cloudflare.com/</a></p>
+<p>直接用临时邮箱注册一个即可</p>
+<p><a href="https://temp-mail.org/zh/" title="https://temp-mail.org/zh/">https://temp-mail.org/zh/</a></p>
+<h2 id="0x04-绑定服务器"><a href="#0x04-绑定服务器" class="headerlink" title="0x04 绑定服务器"></a>0x04 绑定服务器</h2><p>将freenom 购买的域名添加进去</p>
+<p>可以参考这个</p>
+<p><a href="https://blog.csdn.net/weixin_42891146/article/details/122209661" title="https://blog.csdn.net/weixin_42891146/article/details/122209661">https://blog.csdn.net/weixin_42891146/article/details/122209661</a></p>
+<h3 id="1-添加站点"><a href="#1-添加站点" class="headerlink" title="1.添加站点"></a>1.添加站点</h3><p><img src="/2022/937989325/image_UVxPdhuqxz-16689164290514.png"></p>
+<p>选择免费的即可</p>
+<p><img src="/2022/937989325/image_OBFQK8nxwB-16689164290515.png"></p>
+<p>复制 nameserver1 和 nameserver2的内容</p>
+<p><img src="/2022/937989325/image_pVFx8hfKus-16689164290516.png"></p>
+<h3 id="2-CDN绑定域名"><a href="#2-CDN绑定域名" class="headerlink" title="2.CDN绑定域名"></a>2.CDN绑定域名</h3><p>选择Services→MyDomains</p>
+<p><img src="/2022/937989325/image_tTI8V-rHk--16689164290517.png"></p>
+<p>选择Manage Domain</p>
+<p><img src="/2022/937989325/image_yFhgVBAoVR-16689164290518.png"></p>
+<p>选择Nameservers</p>
+<p><img src="/2022/937989325/image_KakkEqhHXF-16689164290519.png"></p>
+<p>将CloudFlare两个地址填进去</p>
+<p><img src="/2022/937989325/image_L6MgdGHo-6-166891642905110.png"></p>
+<p>返回CloudFlare 去看，这个需要等一会，等到 active 即可</p>
+<p><img src="/2022/937989325/image_BweIR-Yool-166891642905111.png"></p>
+<h3 id="3-设置解析"><a href="#3-设置解析" class="headerlink" title="3.设置解析"></a>3.设置解析</h3><p>添加一个 A记录 <a href="http://www.xxx.tk/">www.xxx.tk</a>  content 为ip地址</p>
+<p>最终域名为  <a href="http://www.xxx.tk/">www.xxx.tk</a></p>
+<p><img src="/2022/937989325/image_TNhkoWiXG_-166891642905112.png"></p>
+<p>配置这个</p>
+<p><img src="/2022/937989325/image_HM52RQYZLY-166891642905113.png"></p>
+<p>以此往下关闭即可</p>
+<p><img src="/2022/937989325/image_g36-1-C_tX-166891642905214.png"></p>
+<p><img src="/2022/937989325/image_eKhEpGv2jl-166891642905215.png"></p>
+<p><img src="/2022/937989325/image_c6YR65KgUo-166891642905216.png"></p>
+<h3 id="4-测试"><a href="#4-测试" class="headerlink" title="4.测试"></a>4.测试</h3><p>vps 访问开启80端口</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">python3 -m http.server <span class="number">80</span></span><br></pre></td></tr></table></figure>
+
+<p><a href="http://www.xxx.tk/">http://www.xxx.tk</a> 域名可以看到内容</p>
+<p>然后访问域名的80端口测试</p>
+<p><img src="/2022/937989325/image_B19lRxrjEX-166891642905217.png"></p>
+<p>ping域名看看</p>
+<p><img src="/2022/937989325/image_0lwg7wkQ8t-166891642905218.png"></p>
+<p>至此绑定已经完成</p>
+<h2 id="0x05-HTTPS-加密"><a href="#0x05-HTTPS-加密" class="headerlink" title="0x05 HTTPS 加密"></a>0x05 HTTPS 加密</h2><p>参考这个</p>
+<p><a href="https://cn-sec.com/archives/1168150.html" title="https://cn-sec.com/archives/1168150.html">https://cn-sec.com/archives/1168150.html</a></p>
+<p><a href="https://blog.csdn.net/weixin_42891146/article/details/122209661" title="https://blog.csdn.net/weixin_42891146/article/details/122209661">https://blog.csdn.net/weixin_42891146/article/details/122209661</a></p>
+<p>生成www.xxx.tk.store</p>
+<p>创建证书</p>
+<p><img src="/2022/937989325/image_Qwz9ppZjkl-166891642905219.png"></p>
+<p><img src="/2022/937989325/image_awd5tWXjx5-166891642905220.png"></p>
+<p>复制证书创建txt导入，修改文件名为xxxx.pem</p>
+<p>复制私钥创建txt导入，修改文件名为xxxx.key</p>
+<p>将创建的pem和key文件上传至云服务器。执行以下命令（<a href="http://www.xxx.com为申请的域名)/">www.xxx.com为申请的域名）</a></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">openssl pkcs12 -export -in xxxx.pem -inkey xxxx.key -out www.xxx.com.p12 -name www.xxx.com -passout pass:<span class="number">123456</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">keytool -importkeystore -deststorepass <span class="number">123456</span> -destkeypass <span class="number">123456</span> -destkeystore www.xxx.com.store -srckeystore www.xxx.com.p12 -srcstoretype PKCS12 -srcstorepass <span class="number">123456</span> -alias www.xxx.com</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="0x06-流量混淆"><a href="#0x06-流量混淆" class="headerlink" title="0x06 流量混淆"></a>0x06 流量混淆</h2><h3 id="1-配置profile文件"><a href="#1-配置profile文件" class="headerlink" title="1.配置profile文件"></a>1.配置profile文件</h3><p>GitHub有很多，具体可以自己找，搜索 profile 关键字即可</p>
+<p><a href="https://github.com/threatexpress/malleable-c2" title="https://github.com/threatexpress/malleable-c2">https://github.com/threatexpress/malleable-c2</a></p>
+<p>这里我用的是这个，因为我的cs是4.7的所以用4.7的 profile</p>
+<p><img src="/2022/937989325/image_KMCqL-iR_F-166891642905221.png"></p>
+<h4 id="https-certificate"><a href="#https-certificate" class="headerlink" title="https-certificate"></a>https-certificate</h4><p>打开下载好的jquery-Profile</p>
+<p>一个是https-certificate模块中的<code>keystore</code>和<code>password</code>，修改后把注释去掉</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//原文件</span></span><br><span class="line"># set keystore <span class="string">&quot;/pathtokeystore&quot;</span>;</span><br><span class="line"># set password <span class="string">&quot;password&quot;</span>;</span><br><span class="line">修改为，要带 store</span><br><span class="line">set keystore <span class="string">&quot;www.xxx.tk.store&quot;</span></span><br><span class="line">set password <span class="string">&quot;123456&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/937989325/image_nNxx7rRVvy-166891642905222.png"></p>
+<h4 id="http-stager"><a href="#http-stager" class="headerlink" title="http-stager"></a>http-stager</h4><p>修改http-stager 中的Host和Referer及Content-Type。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// server 中 Content-Type</span></span><br><span class="line">header <span class="string">&quot;Content-Type&quot;</span> <span class="string">&quot;application/javascript; charset=utf-8&quot;</span>;</span><br><span class="line">修改为：</span><br><span class="line">header <span class="string">&quot;Content-Type&quot;</span> <span class="string">&quot;application/*; charset=utf-8&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// client Host和Referer</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/937989325/image_MKSt_peDur-166891642905223.png"></p>
+<h4 id="http-get"><a href="#http-get" class="headerlink" title="http-get"></a>http-get</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// server 中 Content-Type</span></span><br><span class="line">header <span class="string">&quot;Content-Type&quot;</span> <span class="string">&quot;application/javascript; charset=utf-8&quot;</span>;</span><br><span class="line">修改为：</span><br><span class="line">header <span class="string">&quot;Content-Type&quot;</span> <span class="string">&quot;application/*; charset=utf-8&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// client Host和Referer</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/937989325/image_31kA0GjjRB-166891642905224.png"></p>
+<h4 id="http-post"><a href="#http-post" class="headerlink" title="http-post"></a>http-post</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// server 中 Content-Type</span></span><br><span class="line">header <span class="string">&quot;Content-Type&quot;</span> <span class="string">&quot;application/javascript; charset=utf-8&quot;</span>;</span><br><span class="line">修改为：</span><br><span class="line">header <span class="string">&quot;Content-Type&quot;</span> <span class="string">&quot;application/*; charset=utf-8&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// client Host和Referer</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/937989325/image_IUjxrRvbKP-166891642905225.png"></p>
+<p>在这个Profile中，我们请求的URI是以.js结尾的，Cloudflare作为一个CDN肯定要去缓存它，但这样的话请求就无法到达我们的CS服务器，自然也就无法上线了。使用开发模式并清除缓存（这个只能缓存两个小时）。</p>
+<p><img src="/2022/937989325/image_5_qH7dfeLV-166891642905226.png"></p>
+<p>设置规则，不让CloudFlare 进行缓存</p>
+<p><img src="/2022/937989325/image_O-guBwLDJN-166891642905227.png"></p>
+<h3 id="2-测试"><a href="#2-测试" class="headerlink" title="2.测试"></a>2.测试</h3><p>将修改的jquery-c2.4.3.profile 上传vps上面</p>
+<p>在修改完成后，使用CS自带的c2lint对profile语法进行检查，没有报错的话说明配置是对的。</p>
+<p>4.7 不带这个 c2lint 直接运行如下，如果没有错误说明正确，如果有错误会提示profile哪一行出现问题</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">./teamserver <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span> password jquery-c2<span class="number">.4</span><span class="number">.3</span>.profile</span><br></pre></td></tr></table></figure>
+
+<h2 id="0x07-测试上线"><a href="#0x07-测试上线" class="headerlink" title="0x07 测试上线"></a>0x07 测试上线</h2><h3 id="1-启动cs服务器"><a href="#1-启动cs服务器" class="headerlink" title="1.启动cs服务器"></a>1.启动cs服务器</h3><p><img src="/2022/937989325/image_ABtfm5v0Or-166891642905228.png"></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">./teamserver <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span> password jquery-c2<span class="number">.4</span><span class="number">.3</span>.profile</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-新建监听器"><a href="#2-新建监听器" class="headerlink" title="2.新建监听器"></a>2.新建监听器</h3><p>!!! 注意：</p>
+<p>如果CS的服务器是国内服务器且没有进行备案的话，是无法使用80、8080、443、8443端口提供服务的；如果服务器是国外服务器的话则无影响。Cloudflare的代理模式只有部分端口能够使用，使用时要注意端口的设置，否则是监听不到的。</p>
+<p>Cloudflare 支持的 HTTP 端口：80、8080、8880、2052、2082、2086、2095</p>
+<p>Cloudflare 支持的 HTTPS 端口：443、2053、2083、2087、2096、8443</p>
+<p><img src="/2022/937989325/image__32jA1hix3-166891642905229.png"></p>
+<h3 id="3-抓包测试"><a href="#3-抓包测试" class="headerlink" title="3.抓包测试"></a>3.抓包测试</h3><p>生成exe木马，抓包测试</p>
+<p>是CDN 地址</p>
+<h4 id="http流量"><a href="#http流量" class="headerlink" title="http流量"></a>http流量</h4><p><img src="/2022/937989325/image_yvrIZnrAr2-166891642905330.png"></p>
+<p><img src="/2022/937989325/image_vLy2U_dV5_-166891642905331.png"></p>
+<h4 id="https-流量"><a href="#https-流量" class="headerlink" title="https 流量"></a>https 流量</h4><p><img src="/2022/937989325/image_3sZB7Ts5HV-166891642905332.png"></p>
+<p><img src="/2022/937989325/image_Q57TIUwyUj-166891642905333.png"></p>
+<p><img src="/2022/937989325/image_BZVnsaXzn5-166891642905334.png"></p>
+<h4 id="powershel"><a href="#powershel" class="headerlink" title="powershel"></a>powershel</h4><p>如果不上线检查一下window的实时防护</p>
+<p><img src="/2022/937989325/image_OMAH06ggbP-166891642905335.png"></p>
+<p><img src="/2022/937989325/image_5q1ozVF71W-166891642905336.png"></p>
+<p><img src="/2022/937989325/image_brimetYTCl-166891642905337.png"></p>
+<p>查看端口建立情况，可以查看，我们监听的http的端口是8880，这个地址</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">netstat -ant </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/937989325/image_Gzm1dDeLDv-166891642905338.png"></p>
+<p><img src="/2022/937989325/image_VURPb6YgVY-166891642905339.png"></p>
+<h2 id="0x08-修改端口"><a href="#0x08-修改端口" class="headerlink" title="0x08 修改端口"></a>0x08 修改端口</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">./TeamServerImage -Dcobaltstrike.server_port=<span class="number">48951</span> -Dcobaltstrike.server_bindto=<span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span> -Djavax.net.ssl.keyStore=./cobaltstrike.store -Djavax.net.ssl.keyStorePassword=<span class="number">123456</span> teamserver $*</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/937989325/image_u3V-TVGnM7-166891642905340.png"></p>
+<p>可作为参考的链接</p>
+<p><a href="https://cloud.tencent.com/developer/article/1952637" title="https://cloud.tencent.com/developer/article/1952637">https://cloud.tencent.com/developer/article/1952637</a></p>
+<p><a href="https://www.wangan.com/p/7fy7475c1903ed27" title="https://www.wangan.com/p/7fy7475c1903ed27">https://www.wangan.com/p/7fy7475c1903ed27</a></p>
+<p><a href="https://www.exterminate-dog.com/2022/01/17/2022004/" title="https://www.exterminate-dog.com/2022/01/17/2022004/">https://www.exterminate-dog.com/2022/01/17/2022004/</a></p>
+<p><a href="https://cn-sec.com/archives/1168150.html" title="https://cn-sec.com/archives/1168150.html">https://cn-sec.com/archives/1168150.html</a></p>
+<p><a href="https://xz.aliyun.com/t/5728" title="https://xz.aliyun.com/t/5728">https://xz.aliyun.com/t/5728</a></p>
+<p><a href="https://blog.csdn.net/weixin_42891146/article/details/122209661" title="https://blog.csdn.net/weixin_42891146/article/details/122209661">https://blog.csdn.net/weixin_42891146/article/details/122209661</a></p>
+<p><a href="https://toutiao.io/posts/d3yizxm/preview" title="https://toutiao.io/posts/d3yizxm/preview">https://toutiao.io/posts/d3yizxm/preview</a></p>
+]]></content>
+      <categories>
+        <category>红队建设</category>
+      </categories>
+      <tags>
+        <tag>cs</tag>
+        <tag>vps</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Fastjson漏洞利用合集</title>
     <url>/2022/498480683/</url>
     <content><![CDATA[<h1 id="0x01-Fastjson-概述"><a href="#0x01-Fastjson-概述" class="headerlink" title="0x01 Fastjson 概述"></a>0x01 Fastjson 概述</h1><h2 id="1-应用场景"><a href="#1-应用场景" class="headerlink" title="1.应用场景"></a>1.应用场景</h2><h3 id="接口返回数据"><a href="#接口返回数据" class="headerlink" title="接口返回数据"></a>接口返回数据</h3><ol>
