@@ -224,7 +224,7 @@
 <h2 id="web-服务器"><a href="#web-服务器" class="headerlink" title="web 服务器"></a>web 服务器</h2><p>类似于，python3 -m http.server</p>
 <figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">  http.Handle(<span class="string">&quot;/&quot;</span>, http.FileServer(http.Dir(<span class="string">&quot;.&quot;</span>)))</span><br><span class="line">  http.ListenAndServe(<span class="string">&quot;:8082&quot;</span>, <span class="literal">nil</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="windows-编译多个平台程序"><a href="#windows-编译多个平台程序" class="headerlink" title="windows 编译多个平台程序"></a>windows 编译多个平台程序</h2><h4 id="设置GOOS和GOARCH环境变量来指定目标平台的操作系统和CPU架构"><a href="#设置GOOS和GOARCH环境变量来指定目标平台的操作系统和CPU架构" class="headerlink" title="设置GOOS和GOARCH环境变量来指定目标平台的操作系统和CPU架构"></a>设置<code>GOOS</code>和<code>GOARCH</code>环境变量来指定目标平台的操作系统和CPU架构</h4><ul>
+<h2 id="windows-编译多个平台程序"><a href="#windows-编译多个平台程序" class="headerlink" title="windows 编译多个平台程序"></a>windows 编译多个平台程序</h2><h3 id="设置GOOS和GOARCH环境变量来指定目标平台的操作系统和CPU架构"><a href="#设置GOOS和GOARCH环境变量来指定目标平台的操作系统和CPU架构" class="headerlink" title="设置GOOS和GOARCH环境变量来指定目标平台的操作系统和CPU架构"></a>设置<code>GOOS</code>和<code>GOARCH</code>环境变量来指定目标平台的操作系统和CPU架构</h3><ul>
 <li>  Windows 64位：<code>GOOS=windows</code>，<code>GOARCH=amd64</code></li>
 <li>  Windows 32位：<code>GOOS=windows</code>，<code>GOARCH=386</code></li>
 <li>  macOS 64位：<code>GOOS=darwin</code>，<code>GOARCH=amd64</code></li>
